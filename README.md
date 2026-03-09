@@ -26,4 +26,4 @@ Program behavior:
 
 Output files:
 - log.txt (generated when the program runs)
-- the log.txt will be included in the zip file, but it is not required 
+

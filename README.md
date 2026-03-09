@@ -1,4 +1,4 @@
-Readers-Writers Problem with Load Balancing
+Readers-Writers Problem with Load Balancing - Ayla Ismayilzada
 
 Language:
 C using POSIX threads and semaphores

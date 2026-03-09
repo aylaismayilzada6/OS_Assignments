@@ -197,7 +197,7 @@ void logStatus(const char *action, int id, int replica) {
     sem_wait(&mutex);
     
   fprintf(logFile,
-        "%s | Thread %d | Replica %d | Readers: [%d, %d, %d] | Writer active: %d | Contents: [%s] [%s] [%s]\n |" ,
+        "%s | Thread %d | Replica %d | Readers: [%d, %d, %d] | Writer active: %d | Contents: [%s] [%s] [%s]\n " ,
         action,
         id,
         replica,
@@ -250,3 +250,4 @@ int main() {
 
     return 0;
 }
+

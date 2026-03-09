@@ -7,6 +7,11 @@
 #include <time.h>
 
 #define NUM_REPLICAS 3
+#define NUM_READERS 10
+
+pthread_t readers[NUM_READERS];
+int ids[NUM_READERS];
+pthread_t w;
 
 /* 
 Overview: 
@@ -207,11 +212,12 @@ void logStatus(const char *action, int id, int replica) {
 
 
 int main() {
-    pthread_t r1, r2, r3, w;
-    int id1 = 1, id2 = 2, id3 = 3;
     
+    pthread_t readers[NUM_READERS];
+    pthread_t writerThread;
+    int ids[NUM_READERS];
+
     srand(time(NULL));
-    
     FILE *logFile = fopen("log.txt", "w");
         if (logFile != NULL) {
             fclose(logFile);
@@ -221,23 +227,23 @@ int main() {
     sem_init(&mutex, 0, 1);
     sem_init(&writeLock, 0, 1);
     
-    // writers and reders at random intervals 
+ 
+    pthread_create(&writerThread, NULL, writer, NULL);
 
-    pthread_create(&r1, NULL, reader, &id1);
-    usleep((rand() % 1000 + 500) * 1000);
-    
-    pthread_create(&r2, NULL, reader, &id2);
-    usleep((rand() % 1000 + 500) * 1000);
-    
-    pthread_create(&w, NULL, writer, NULL);
-    usleep((rand() % 1000 + 500) * 1000);
-    
-    pthread_create(&r3, NULL, reader, &id3);
+    // create readers at random intervals 
+    for (int i = 0; i < NUM_READERS; i++) {
+        ids[i] = i + 1;
+        pthread_create(&readers[i], NULL, reader, &ids[i]);
+        usleep((rand() % 1000 + 500) * 1000);
+    }
 
-    pthread_join(r1, NULL);
-    pthread_join(r2, NULL);
-    pthread_join(r3, NULL);
-    pthread_join(w, NULL);
+    // wait for all readers 
+    for (int i = 0; i < NUM_READERS; i++) {
+        pthread_join(readers[i], NULL);
+    }
+
+    // wait for the writer 
+    pthread_join(writerThread, NULL);
 
     sem_destroy(&mutex);
     sem_destroy(&writeLock);

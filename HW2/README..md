@@ -1,4 +1,4 @@
-# Memory Allocation Simulator (Linked List Based)
+# Memory Allocation Simulator 
 
 ## Context
 A simple **C program** that simulates how an operating system manages memory using dynamic allocation strategies.
